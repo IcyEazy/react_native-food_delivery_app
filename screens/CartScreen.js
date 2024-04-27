@@ -7,6 +7,7 @@ import { themeColors } from "../theme";
 import { useDispatch, useSelector } from "react-redux";
 import { selectRestaurant } from "../slices/restaurantSlice";
 import {
+  addToCart,
   removeFromCart,
   selectCartItems,
   selectCartTotal,
@@ -106,6 +107,18 @@ export default function CartScreen() {
                   width={20}
                 />
               </TouchableOpacity>
+              {/* <TouchableOpacity
+                onPress={() => dispatch(addToCart({ ...dish }))}
+                className="p-1 rounded-full"
+                style={{ backgroundColor: themeColors.bgColor(1) }}
+              >
+                <Icon.Plus
+                  strokeWidth={2}
+                  stroke={"white"}
+                  height={20}
+                  width={20}
+                />
+              </TouchableOpacity> */}
             </View>
           );
         })}

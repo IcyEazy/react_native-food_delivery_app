@@ -1,4 +1,11 @@
-import { View, Text, StatusBar, TextInput, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StatusBar,
+  TextInput,
+  ScrollView,
+  Platform,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Icon from "react-native-feather";
@@ -17,6 +24,8 @@ export default function HomeScreen() {
       setFeaturedRestaurants(data);
     });
   }, []);
+
+  const ios = Platform.OS === "ios";
 
   return (
     <SafeAreaView style={{ backgroundColor: themeColors.bgColor(0.2) }}>
@@ -48,7 +57,7 @@ export default function HomeScreen() {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: 20,
+          paddingBottom: ios ? 20 : 80,
         }}
       >
         {/* categories */}

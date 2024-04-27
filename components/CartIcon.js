@@ -10,7 +10,7 @@ export default function CartIcon() {
   // get cart items from redux store
   const cartItems = useSelector(selectCartItems);
   // get total amount in cart
-  const cartTotal = useSelector(selectCartTotal);
+  const cartTotalAmount = useSelector(selectCartTotal);
   if (!cartItems.length) return;
 
   return (
@@ -31,7 +31,9 @@ export default function CartIcon() {
         <Text className="flex-1 text-center font-extrabold text-white text-lg">
           View Cart
         </Text>
-        <Text className="font-extrabold text-white text-lg">${cartTotal}</Text>
+        <Text className="font-extrabold text-white text-lg">
+          ${cartTotalAmount}
+        </Text>
       </TouchableOpacity>
     </View>
   );

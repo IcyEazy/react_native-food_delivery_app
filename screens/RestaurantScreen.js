@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   StatusBar,
+  Platform,
 } from "react-native";
 import React, { useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -19,63 +20,71 @@ import { imageUrlFor } from "../sanity";
 export default function RestaurantScreen() {
   const { params } = useRoute();
   const navigation = useNavigation();
-  let item = params;
+  let restaurant = params;
   //   console.log("Restaurant: ", item);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (item && item._id) {
-      dispatch(setRestaurant({ ...item }));
+    if (restaurant && restaurant._id) {
+      dispatch(setRestaurant({ ...restaurant }));
     }
   }, []);
+
+  const ios = Platform.OS === "ios";
   return (
     <View>
       <CartIcon />
       <StatusBar barStyle={"light-content"} />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View className="relative">
           <Image
             className="w-full h-72"
-            source={{ uri: item.image ? imageUrlFor(item.image).url() : "" }}
+            source={{
+              uri: restaurant.image ? imageUrlFor(restaurant.image).url() : "",
+            }}
           />
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            className="absolute top-14 left-4 bg-gray-50 p-2 rounded-full shadow"
+            className={`absolute ${
+              ios ? "top-14" : "top-7"
+            } left-4 bg-gray-50 p-2 rounded-full shadow`}
           >
             <Icon.ArrowLeft strokeWidth={3} stroke={themeColors.bgColor(1)} />
           </TouchableOpacity>
         </View>
         <View
           style={{ borderTopLeftRadius: 40, borderTopRightRadius: 40 }}
-          className="bg-[#F9F9F9] -mt-12 pt-6"
+          className="bg-white -mt-12 pt-6"
         >
           <View className="px-5">
-            <Text className="text-3xl font-bold">{item.name}</Text>
+            <Text className="text-3xl font-bold">{restaurant.name}</Text>
             <View className="flex-row gap-2 my-1">
               <View className="flex-row items-center gap-1">
                 <Text className="text-yellow-500 text-xl">&#9733;</Text>
                 <Text className="text-xs">
-                  <Text className="text-gray-700">{item.rating}</Text>
+                  <Text className="text-gray-700">{restaurant.rating}</Text>
                   <Text className="text-gray-700">
-                    ({item.reviews} reviews) •{" "}
-                    <Text className="font-semibold">{item?.type?.name}</Text>
+                    ({restaurant.reviews} reviews) •{" "}
+                    <Text className="font-semibold">
+                      {restaurant?.type?.name}
+                    </Text>
                   </Text>
                 </Text>
               </View>
               <View className="flex-row items-center gap-1">
                 <Icon.MapPin color="gray" width={15} height={15} />
                 <Text className="text-gray-700 text-xs">
-                  Nearby• {item.address}
+                  Nearby• {restaurant.address}
                 </Text>
               </View>
             </View>
-            <Text className="text-gray-500 mt-2">{item.description}</Text>
+            <Text className="text-gray-500 mt-2">{restaurant.description}</Text>
           </View>
         </View>
         <View className="pb-36 bg-[#F9F9F9]">
           <Text className="px-4 py-4 text-2xl font-bold">Menu</Text>
           {/* dishes */}
-          {item.dishes.map((dish, index) => (
+          {restaurant.dishes.map((dish, index) => (
             <DishRow key={index} dish={{ ...dish }} />
           ))}
         </View>

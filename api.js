@@ -30,28 +30,28 @@ export const getFeaturedRestaurantById = (id) => {
   return sanityQuery(`
     *[_type=="featured" && _id=="${id}"]{
   ..., 
-  restaurants[]=>{
+  restaurants[]->{
     ...,
-    dishes[]=>{
+    dishes[]->{
       ...
     },
-    type=>{
-      name
+    type->{
+    name
     }
   }
-}
+    }
     `);
 };
 export const getRestaurantById = (id) => {
   return sanityQuery(`
     *[_type=="restaurant" && _id=="${id}"]{
-  ..., 
-  dishes[]=>{
-    ...
-  },
-  type=>{
-    name
-  }
-}
+  ...,
+      dishes[]->{
+        ...
+      },
+      type->{
+      name
+      }
+    }
     `);
 };
