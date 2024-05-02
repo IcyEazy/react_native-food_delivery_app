@@ -8,7 +8,7 @@ import MapView, { Marker } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 import { selectRestaurant } from "../slices/restaurantSlice";
 import { emptyCart } from "../slices/cartSlice";
-import { clearSearch } from "../slices/searchSlice";
+import { clearSearch, setCategory } from "../slices/searchSlice";
 
 export default function DeliveryScreen() {
   const restaurant = useSelector(selectRestaurant);
@@ -20,6 +20,7 @@ export default function DeliveryScreen() {
     navigation.navigate("Home");
     dispatch(emptyCart());
     dispatch(clearSearch());
+    dispatch(setCategory(""));
   };
 
   return (

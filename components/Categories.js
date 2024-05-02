@@ -3,10 +3,14 @@ import React, { useEffect, useState } from "react";
 // import { categories } from "../constants";
 import { getCategories } from "../api";
 import { imageUrlFor } from "../sanity";
+import { useDispatch } from "react-redux";
+import { setCategory } from "../slices/searchSlice";
 
 export default function Categories() {
   const [activeCategory, setActiveCategory] = useState(null);
   const [categories, setCategories] = useState([]);
+
+  const dispatch = useDispatch();
 
   const handleCategoryPress = (category) => {
     setActiveCategory(category);
@@ -35,7 +39,10 @@ export default function Categories() {
           return (
             <View key={index} className="flex justify-center items-center mr-6">
               <TouchableOpacity
-                onPress={() => handleCategoryPress(category._id)}
+                onPress={() => {
+                  handleCategoryPress(category._id);
+                  dispatch(setCategory(category.name));
+                }}
                 className={`p-1 rounded-full shadow bg-gray-200 ${btnClass}`}
               >
                 <Image

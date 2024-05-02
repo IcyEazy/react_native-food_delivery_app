@@ -63,7 +63,9 @@ export default function CartScreen() {
           source={require("../assets/images/deliveryGuy.jpeg")}
           className="w-20 h-20 rounded-full"
         />
-        <Text className="flex-1 pl-4">Deliver in 20 -30 minutes</Text>
+        <Text className="flex-1 pl-4 text-white">
+          Deliver in 20 -30 minutes
+        </Text>
         <TouchableOpacity>
           <Text className="font-bold" style={{ color: themeColors.text }}>
             Change

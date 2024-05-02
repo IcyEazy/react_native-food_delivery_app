@@ -17,21 +17,22 @@ import { getFeaturedRestaurants } from "../api";
 import { debounce } from "lodash";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { getSearch, setSearch } from "../slices/searchSlice";
+import { getCategory, getSearch, setSearch } from "../slices/searchSlice";
 
 export default function HomeScreen() {
   const [featuredRestaurants, setFeaturedRestaurants] = useState([]);
-  // const [search, setSearch] = useState(""); // for search bar
 
   const dispatch = useDispatch();
   const search = useSelector(getSearch); // for search bar
+  const categoryName = useSelector(getCategory);
+  // console.log("categoryName: ", categoryName);
   const handleTextChange = (text) => {
     // for search bar
     dispatch(setSearch(text));
-    // setSearch(text);
   };
 
-  const handleTextDebounce = useCallback(debounce(handleTextChange, 2000), []);
+  let searchValue = search.toLowerCase(); // for search bar
+  // const handleTextDebounce = useCallback(debounce(handleTextChange, 2000), []);
 
   // get featured restaurants data from api
   useEffect(() => {
@@ -43,6 +44,25 @@ export default function HomeScreen() {
 
   const ios = Platform.OS === "ios";
 
+  // filter featured restaurants by category
+  const filteredFeaturedRestaurants =
+    categoryName !== ""
+      ? featuredRestaurants?.filter((item) => {
+          const restCategory = item?.restaurants?.filter((rest, index) => {
+            return rest?.type?.name === categoryName;
+          });
+          return restCategory?.length > 0;
+        })
+      : featuredRestaurants;
+
+  //filter featured restaurants by search criteria
+  const finalFilteredFeaturedRestaurants =
+    searchValue === ""
+      ? filteredFeaturedRestaurants
+      : filteredFeaturedRestaurants?.filter((item) =>
+          item?.name?.toLowerCase().includes(searchValue)
+        );
+
   return (
     <SafeAreaView style={{ backgroundColor: themeColors.bgColor(0.2) }}>
       <StatusBar barStyle="dark-content" />
@@ -53,7 +73,8 @@ export default function HomeScreen() {
           <TextInput
             placeholder="Restaurants"
             value={search}
-            onChangeText={handleTextDebounce}
+            // onChangeText={handleTextDebounce}
+            onChangeText={handleTextChange}
             className="ml-2 flex-1"
           />
           <View className="flex-row items-center space-x-1 border-0 border-l-2 pl-2 border-l-gray-300">
@@ -86,35 +107,15 @@ export default function HomeScreen() {
 
         {/* featured */}
         <View className="mt-5">
-          {featuredRestaurants.map((item, index) => {
-            let searchValue = search.toLowerCase(); // for search bar
-            if (item.name.toLowerCase().includes(searchValue)) {
-              return (
-                <FeaturedRow
-                  key={index}
-                  title={item.name}
-                  description={item.description}
-                  restaurants={item.restaurants}
-                />
-              );
-            } else if (search === "")
-              return (
-                // for search bar
-                <FeaturedRow
-                  key={index}
-                  title={item.name}
-                  description={item.description}
-                  restaurants={item.restaurants}
-                />
-              );
-            // return (
-            //   <FeaturedRow
-            //     key={index}
-            //     title={item.name}
-            //     description={item.description}
-            //     restaurants={item.restaurants}
-            //   />
-            // );
+          {finalFilteredFeaturedRestaurants?.map((item, index) => {
+            return (
+              <FeaturedRow
+                key={index}
+                title={item?.name}
+                description={item?.description}
+                restaurants={item?.restaurants}
+              />
+            );
           })}
         </View>
       </ScrollView>
